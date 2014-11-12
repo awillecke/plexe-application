@@ -40,6 +40,8 @@ void BaseApp::initialize(int stage) {
 		engineTau = par("engineTau").doubleValue();
 
 		myId = getParentModule()->getIndex();
+		leaderId = -2;
+		frontId = -2;
 	}
 
 	if (stage == 1) {
@@ -74,11 +76,11 @@ void BaseApp::handleLowerMsg(cMessage *msg) {
 		ASSERT2(epkt, "received UnicastMessage does not contain a PlatooningBeacon");
 
 		//if the message comes from the leader
-		if (epkt->getVehicleId() == 0) {
+		if (epkt->getVehicleId() == leaderId) {
 			traciVehicle->setPlatoonLeaderData(epkt->getSpeed(), epkt->getAcceleration(), epkt->getPositionX(), epkt->getPositionY(), epkt->getTime());
 		}
 		//if the message comes from the vehicle in front
-		if (epkt->getVehicleId() == myId - 1) {
+		if (epkt->getVehicleId() == frontId) {
 			traciVehicle->setPrecedingVehicleData(epkt->getSpeed(), epkt->getAcceleration(), epkt->getPositionX(), epkt->getPositionY(), epkt->getTime());
 		}
 
