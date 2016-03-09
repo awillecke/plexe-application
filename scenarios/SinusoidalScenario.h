@@ -15,12 +15,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef ENGINEAPP_H_
-#define ENGINEAPP_H_
+#ifndef SINUSOIDALSCENARIO_H_
+#define SINUSOIDALSCENARIO_H_
 
-#include "veins/modules/application/platooning/apps/BaseApp.h"
+#include "veins/modules/application/platooning/scenarios/BaseScenario.h"
 
-class EngineApp : public BaseApp
+class SinusoidalScenario : public BaseScenario
 {
 
 	public:
@@ -29,38 +29,31 @@ class EngineApp : public BaseApp
 		virtual void finish();
 
 	protected:
-		virtual void onBeacon(WaveShortMessage* wsm);
-		virtual void onData(WaveShortMessage* wsm);
-
-	private:
 
 		//frequency at which the leader speed is oscillating
 		double leaderOscillationFrequency;
-		//controller to be used for platooning
-		enum Plexe::ACTIVE_CONTROLLER controller;
-		//headway time for ACC
-		double accHeadway;
+		//oscillation amplitude
+		double oscillationAmplitude;
 		//leader average speed
 		double leaderSpeed;
-
 		//message used to tell the leader to continuously change its desired speed
-		cMessage *changeSpeed, *brake;
-
-		//vehicle type
-		std::string vehicleType;
+		cMessage *changeSpeed;
+		//start oscillation time
+		SimTime startOscillating;
 
 	public:
-		EngineApp() {
+		SinusoidalScenario() {
+			leaderOscillationFrequency = 0;
+			oscillationAmplitude = 0;
+			leaderSpeed = 0;
 			changeSpeed = 0;
-			brake = 0;
+			startOscillating = SimTime(0);
 		}
 
 	protected:
 
 		virtual void handleSelfMsg(cMessage *msg);
 
-
-
 };
 
-#endif /* ENGINEAPP_H_ */
+#endif
