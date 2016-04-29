@@ -15,22 +15,28 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-package org.car2x.veins.modules.application.platooning.apps;
+package org.car2x.veins.modules.application.platooning.utilities;
 
-import org.car2x.veins.modules.application.platooning.apps.BaseApp;
+import org.car2x.veins.modules.application.platooning.utilities.BasePositionHelper;
 
-simple SimplePlatooningApp like BaseApp
+simple JoinPositionHelper like BasePositionHelper
 {
     parameters:
-        int headerLength @unit("bit") = default(0 bit);
-        //duration of simulation
-        double simulationDuration @unit("s");
+        //number of cars in the scenario
+        int nCars = default(5);
+        //number of lanes in the scenario
+        int nLanes = default(4);
+        //number of cars in the platoon
+        int platoonSize = default(5);
+        int headerLength @unit("bit") = default(0bit);
 
         @display("i=block/app2");
-        @class(SimplePlatooningApp);
+        @class(JoinPositionHelper);
+
     gates:
-        input lowerLayerIn;
-        output lowerLayerOut;
-        input lowerControlIn;
-        output lowerControlOut;
+        input lowerLayerIn; // from network layer
+        output lowerLayerOut; // to network layer
+        input lowerControlIn; // control from network layer
+        output lowerControlOut; // control to network layer
+
 }

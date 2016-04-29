@@ -13,14 +13,15 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef JOINMANEUVERAPP_H_
-#define JOINMANEUVERAPP_H_
+#ifndef JOINMANEUVERSCENARIO_H_
+#define JOINMANEUVERSCENARIO_H_
 
-#include "veins/modules/application/platooning/apps/BaseApp.h"
+#include "veins/modules/application/platooning/scenarios/BaseScenario.h"
+#include "veins/modules/application/platooning/protocols/BaseProtocol.h"
 
 #include "veins/modules/application/platooning/messages/ManeuverMessage_m.h"
 
-class JoinManeuverApp : public BaseApp
+class JoinManeuverScenario : public BaseScenario
 {
 
 	protected:
@@ -28,11 +29,7 @@ class JoinManeuverApp : public BaseApp
 		enum JOIN_ROLE {LEADER, FOLLOWER, JOINER};
 		//data that each car needs to keep
 		struct VEHICLE_DATA {
-			int					platoonId;	//id of the platoon
-			int					leaderId;	//leader of the platoon
-			int					frontId;	//id of the vehicle in front
 			double				speed;		//speed of the platoon
-			int					lane;		//index of the lane the platoon is travelling in
 			int					joinLane;	//the lane chosen for joining the platoon
 			int					joinerId;	//the id of the vehicle joining the platoon
 			std::vector<int>	formation;	//list of vehicles in the platoon
@@ -79,20 +76,23 @@ class JoinManeuverApp : public BaseApp
 		struct VEHICLE_DATA vehicleData;
 		//message used to start the maneuver
 		cMessage *startManeuver;
+		//pointer to protocol
+		BaseProtocol *protocol;
 
 	public:
+
+		static const int MANEUVER_TYPE = 12347;
 
 		virtual void initialize(int stage);
 		virtual void finish();
 
 	protected:
-		virtual void onBeacon(WaveShortMessage* wsm);
-		virtual void onData(WaveShortMessage* wsm);
+		void sendUnicast(cPacket *msg, int destination);
 
 	private:
 
 	public:
-		JoinManeuverApp()	{
+		JoinManeuverScenario()	{
 			startManeuver = 0;
 		}
 
@@ -110,8 +110,7 @@ class JoinManeuverApp : public BaseApp
 		void handleFollowerMsg(cMessage *msg);
 
 		void prepareManeuverCars(int platoonLane);
-		void receiveMessage(cMessage *msg);
 
 };
 
-#endif /* JOINMANEUVERAPP_H_ */
+#endif

@@ -15,30 +15,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef SIMPLEPLATOONINGAPP_H_
-#define SIMPLEPLATOONINGAPP_H_
+#include "veins/modules/application/platooning/utilities/JoinPositionHelper.h"
 
-#include "veins/modules/application/platooning/apps/BaseApp.h"
+Define_Module(JoinPositionHelper);
 
-class SimplePlatooningApp : public BaseApp
-{
+void JoinPositionHelper::initialize(int stage) {
 
-	public:
+	BasePositionHelper::initialize(stage);
 
-		virtual void initialize(int stage);
-		virtual void finish();
+	if (stage == 0) {
+		myId = getIdFromExternalId(getExternalId());
+	}
 
-	protected:
-		virtual void onBeacon(WaveShortMessage* wsm);
-		virtual void onData(WaveShortMessage* wsm);
+}
 
-	public:
-		SimplePlatooningApp() {}
+void JoinPositionHelper::finish() {
+	BasePositionHelper::finish();
+}
 
-	protected:
+bool JoinPositionHelper::isInSamePlatoon(int vehicleId) {
+	return true;
+}
 
-		virtual void handleSelfMsg(cMessage *msg);
-
-};
-
-#endif /* SIMPLEPLATOONINGAPP_H_ */
+int JoinPositionHelper::getIdFromExternalId(std::string externalId) {
+	int dotIndex = externalId.find_last_of('.');
+	std::string strId = externalId.substr(dotIndex + 1);
+	return strtol(strId.c_str(), 0, 10);
+}

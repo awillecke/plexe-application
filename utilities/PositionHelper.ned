@@ -15,31 +15,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-enum UnicastMessageType {
-	DATA = 0;
-	ACK = 1;
-};
+package org.car2x.veins.modules.application.platooning.utilities;
 
-//
-// Unicast message sent by the unicast protocol
-//
-packet UnicastMessage {
-    //destination MAC address
-    int destination;
-    //source MAC address
-    int source;
-    //sequence number
-    int sequenceNumber;
-    //message type, data or ack
-    int type enum(UnicastMessageType);
-    //priority for the message (will be then mapped onto an AC)
-    //0 = AC_BK
-    //1 = AC_BE
-    //2 = AC_VI
-    //3 = AC_VO
-    int priority = 0;
-    //receive power in dBm
-    double recvPower_dBm;
-    //channel (0 CCH, 1 SCH)
-    int channel;
+import org.car2x.veins.modules.application.platooning.utilities.BasePositionHelper;
+
+simple PositionHelper like BasePositionHelper
+{
+    parameters:
+
+        //number of cars in the scenario
+        int nCars;
+        //number of cars per platoon
+        int platoonSize;
+        //number of lanes
+        int nLanes;
+
+        int headerLength @unit("bit") = default(0bit);
+
+        @display("i=block/app2");
+        @class(PositionHelper);
+
+    gates:
+        input lowerLayerIn; // from network layer
+        output lowerLayerOut; // to network layer
+        input lowerControlIn; // control from network layer
+        output lowerControlOut; // control to network layer
+
 }
