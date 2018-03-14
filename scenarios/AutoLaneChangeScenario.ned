@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2016 Michele Segata <segata@ccs-labs.org>
+// Copyright (C) 2012-2016 Michele Segata <segata@ccs-labs.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -15,13 +15,17 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-package org.car2x.veins.modules.application.platooning.maneuver;
+package org.car2x.veins.modules.application.platooning.scenarios;
 
 import org.car2x.veins.modules.application.platooning.scenarios.BBaseScenario;
 
-simple JoinManeuverScenario extends BBaseScenario
+simple AutoLaneChangeScenario extends BBaseScenario
 {
     parameters:
+        //sumo vehicle type for platooning cars
+        string platooningVType;
+
         @display("i=block/app2");
-        @class(JoinManeuverScenario);
+        @class(AutoLaneChangeScenario);
+
 }

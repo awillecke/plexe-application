@@ -15,13 +15,40 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-package org.car2x.veins.modules.application.platooning.maneuver;
+#ifndef AUTOLANECHANGESCENARIO_H_
+#define AUTOLANECHANGESCENARIO_H_
 
-import org.car2x.veins.modules.application.platooning.scenarios.BBaseScenario;
+#include "veins/modules/application/platooning/scenarios/BaseScenario.h"
 
-simple JoinManeuverScenario extends BBaseScenario
+#include "veins/modules/application/platooning/apps/BaseApp.h"
+
+class AutoLaneChangeScenario : public BaseScenario
 {
-    parameters:
-        @display("i=block/app2");
-        @class(JoinManeuverScenario);
-}
+
+	public:
+
+		virtual void initialize(int stage);
+		virtual void finish();
+
+	protected:
+
+		//leader average speed
+		double leaderSpeed;
+		//application layer, used to stop the simulation
+		BaseApp *appl;
+		//sumo vehicle type of plaotoning cars
+		std::string platooningVType;
+
+	public:
+		AutoLaneChangeScenario() {
+			leaderSpeed = 0;
+			appl = 0;
+		}
+
+	protected:
+
+		virtual void handleSelfMsg(cMessage *msg);
+
+};
+
+#endif
